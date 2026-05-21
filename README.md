@@ -6,7 +6,7 @@
 ![Shell](https://img.shields.io/badge/PowerShell-7%2B-5391FE?logo=powershell&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-HashPrompt is a single PowerShell script that hooks the **Enter** key in your shell. Any line that starts with `#` is sent to an LLM instead of being executed. The model decides what you wanted:
+This is a single PowerShell script that hooks the **Enter** key in your shell. Any line that starts with `#` is sent to an LLM instead of being executed. The model decides what you wanted:
 
 - **A question?** It prints the answer inline.
 - **A task?** It shows you a command, and *nothing runs until you confirm.*
@@ -27,7 +27,7 @@ PS C:\> # explain the difference between a junction and a symlink
 
 ## Why a script and not a "terminal plugin"?
 
-Windows Terminal can't do this on its own — it's only an emulator that draws whatever shell runs inside it. Its extension API (fragments) adds profiles, themes, and settings, but it has **no hook for intercepting what you type.** That logic belongs in the shell. HashPrompt uses [PSReadLine](https://learn.microsoft.com/en-us/powershell/module/psreadline/) to override the Enter key: it reads the input buffer before PowerShell parses it, and reroutes any `#`-prefixed line to the model. (As a bonus, PowerShell normally treats `#` as a comment — but because the hook fires *before* parsing, the line never reaches the comment logic.)
+Windows Terminal can't do this on its own — it's only an emulator that draws whatever shell runs inside it. Its extension API (fragments) adds profiles, themes, and settings, but it has **no hook for intercepting what you type.** That logic belongs in the shell. This uses [PSReadLine](https://learn.microsoft.com/en-us/powershell/module/psreadline/) to override the Enter key: it reads the input buffer before PowerShell parses it, and reroutes any `#`-prefixed line to the model. (As a bonus, PowerShell normally treats `#` as a comment — but because the hook fires *before* parsing, the line never reaches the comment logic.)
 
 ## Features
 
@@ -110,7 +110,7 @@ The system prompt that instructs the model to reply in the `{"type": "...", "con
 
 ## Safety
 
-Letting an LLM run shell commands is the part that bites people, so HashPrompt **never executes a suggested command without an explicit `y`.** Even so:
+Letting an LLM run shell commands is the part that bites people, so this code **never executes a suggested command without an explicit `y`.** Even so:
 
 - Read commands before running them — models can be confidently wrong.
 - Be cautious with anything destructive (`Remove-Item`, `Stop-Process`, registry edits). The model is asked to flag risk in its note, but treat that as a hint, not a guarantee.
